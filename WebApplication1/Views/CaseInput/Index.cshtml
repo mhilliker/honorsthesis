@@ -1,0 +1,38 @@
+﻿@{
+    ViewBag.Title = "Inputs";
+}
+
+<div class="container">
+    <h2>Test Case Input Provider</h2>
+
+    <h4>Format</h4>
+    <p>All submissions must be in one of the following JSON formats:</p>
+    <p>{"args":1,"input":[0,10,20,30]}</p>
+    <p>{"args":3,"input":[[10,30,50],[0,20,40]]}</p>
+    <p>If you have expected output, use the following format:</p>
+    <p>{"args":1,"input":[0,10,20,30],"output":[0,1,1,0]}</p>
+    <br />
+    <h4>Upload File</h4>
+
+    <form action="" method="post" enctype="multipart/form-data">
+
+        <label for="file">Filename:</label>
+        <input type="file" name="file" id="file" />
+
+        <input type="submit" />
+    </form>
+    <br />
+    <h4>Text Input</h4>
+
+
+    @using (Html.BeginForm("HandleForm", "CaseInput"))
+    {
+    <!-- Form content goes here -->
+        <p>Enter a name for the case:</p> @Html.TextBox("name")
+        <p>Enter a description for the case (optional):</p> @Html.TextBox("description")
+        <p>Enter your cases:</p> @Html.TextBox("cases")
+        <br />
+        <input type="submit" value="Submit" />
+    }
+
+</div>

@@ -1,0 +1,73 @@
+﻿@model WebApplication1.Models.ResultModel
+
+@{
+    ViewBag.Title = "Results";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<h1>Results from Test</h1>
+
+<p>Service Tested: @Model.input.ServiceName</p>
+
+<p>Method Tested: @Model.input.MethodName</p>
+
+<p> <br /> </p>
+
+<h2>Statistical Analysis:</h2>
+
+<h4>Chi Squared:</h4>
+
+<p>Chi Squared Statistic: @Model.ChiSquared().Statistic</p>
+
+<p>Chi Squared Degrees of Freedom: @Model.ChiSquared().DegreesOfFreedom</p>
+
+<p>Chi Squared Test Result: @Model.ChiSquared().PValue</p>
+
+<p>Chi Square Conclusion: @Model.ChiConclusion()</p>
+
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<script type="text/javascript">
+    google.charts.load('current', {'packages':['corechart']});
+    google.charts.setOnLoadCallback(drawChart);
+
+    function drawChart() {
+        var data = google.visualization.arrayToDataTable([
+            ['X^2','pdf','area'],
+          @Model.getChiSquaredDist()
+          ]);
+
+        var options = {
+            title: 'Chi Squared Results',
+            //curveType: 'function',
+            legend: { position: 'bottom' },
+            seriesType: 'line',
+            series: { 1: { type: 'area' } },
+            colors: ['blue', 'blue']
+        };
+
+        var data2 = google.visualization.arrayToDataTable([
+            ['Case Number','Observed','Expected'],
+          @Model.getObsExp()
+        ]);
+
+        var options2 = {
+            title: 'Observed vs. Expected',
+            vAxis: { title: 'Output', minValue: @Model.getMin().ToString() , maxValue: @Model.getMax().ToString() },
+            hAxis: { title: 'Case', minValue: 0, maxValue: @Model.expected.Length+1 },
+            legend: { position: 'bottom' },
+            seriesType: 'line',
+            colors: ['blue', 'red']
+        };
+
+        var chart  = new google.visualization.ComboChart(document.getElementById('curve_chart'));
+        var chart2 = new google.visualization.ScatterChart(document.getElementById('curve_chart_2'));
+        chart.draw(data, options);
+        chart.draw(data2, options2);
+    }
+    </script>
+
+    <div id="curve_chart" style="width: 700px; height: 400px;"></div>
+    <div id="curve_chart_2" style="width: 700px; height: 400px;"></div>
+
+
