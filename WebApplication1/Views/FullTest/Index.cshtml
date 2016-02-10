@@ -1,0 +1,22 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+}
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+
+<script>
+    function addOption(s)
+    {
+
+    }
+</script>
+
+<h2>Service Reference</h2>
+
+@using (Html.BeginForm("GetServiceRef", "FullTest"))
+{
+    <p>Please input a service reference to test:</p>
+    @Html.TextBox("sref")
+    <input type="submit" value="Submit" />
+}

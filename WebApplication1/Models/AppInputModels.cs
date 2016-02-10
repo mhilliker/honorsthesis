@@ -161,7 +161,13 @@ namespace WebApplication1.Models
 
     }
 
-    
+    public class TestSettings
+    {
+        public string reference { get; set; }
+        public string[] cases { get; set; }
+        public string[] methods { get; set; }
+
+    }
 
     public class AppInputModels
     {

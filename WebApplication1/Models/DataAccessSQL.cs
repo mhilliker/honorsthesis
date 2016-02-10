@@ -70,6 +70,25 @@ namespace WebApplication1.Models
             }
         }
 
+        public string[] getCaseNames()
+        {
+            List<string> l = new List<string>();
+            if (conn != null)
+            {
+                using (SqlCommand command = new SqlCommand("select casename where username=@USERNAME;", conn))
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    command.Parameters.Add("@USERNAME", SqlDbType.VarChar);
+                    command.Parameters["@USERNAME"].Value = "mark";
+                    while (reader.Read())
+                    {
+                        l.Add( reader.GetString(0) );
+                    }
+                }
+            }
+            return l.ToArray();
+        }
+
 
         public void Dispose()
         {

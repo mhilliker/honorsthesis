@@ -33,15 +33,6 @@ namespace WebApplication1.Controllers
         [HttpPost]
         public ActionResult Test(TestInputModel test)
         {
-            //string Command = "INSERT INTO TestCase (url,varname,min,max,numcases) VALUES " + test.toSqlString() + ";";
-            //SqlConnection DataConnection = new SqlConnection(Connection);
-            //SqlCommand DataCommand = new SqlCommand(Command, DataConnection);
-            //// open the connection with our database
-            //DataCommand.Connection.Open();
-            //// execute the statement and return the number of affected rows
-            //int i = DataCommand.ExecuteNonQuery();
-            ////close the connection
-            //DataCommand.Connection.Close();
             double[] observed = test.performTests();
             double[] expected = test.expectedValues;
             var param = new ResultModel(expected, observed, test);

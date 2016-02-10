@@ -1,0 +1,26 @@
+﻿@model WebApplication1.Models.TestSettings
+
+@{
+    ViewBag.Title = "SettingSelector";
+}
+
+<h2>SettingSelector</h2>
+
+@using (Html.BeginForm("Settings", "FullTest"))
+{
+    <p>Please select a method to test:</p>
+    <select id="methodselect">
+        @for (var i = 0; i < Model.methods.Length; i++)
+        {
+            <option id="@Model.methods[i]">@Model.methods[i]</option>
+        }
+    </select>
+
+    <p>Please select a case to test:</p>
+    <select id="caseselect">
+        @for(var i=0; i<Model.cases.Length; i++)
+        {
+            <option id="@Model.cases[i]">@Model.cases[i]</option>
+        }
+    </select>
+}
