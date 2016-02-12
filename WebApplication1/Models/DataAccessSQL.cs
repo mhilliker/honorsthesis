@@ -75,14 +75,16 @@ namespace WebApplication1.Models
             List<string> l = new List<string>();
             if (conn != null)
             {
-                using (SqlCommand command = new SqlCommand("select casename where username=@USERNAME;", conn))
-                using (SqlDataReader reader = command.ExecuteReader())
+                using (SqlCommand command = new SqlCommand("select casename from TestCasesInputs where username=@USERNAME;", conn))
                 {
                     command.Parameters.Add("@USERNAME", SqlDbType.VarChar);
                     command.Parameters["@USERNAME"].Value = "mark";
-                    while (reader.Read())
+                    using (SqlDataReader reader = command.ExecuteReader())
                     {
-                        l.Add( reader.GetString(0) );
+                        while (reader.Read())
+                        {
+                            l.Add(reader.GetString(0));
+                        }
                     }
                 }
             }
