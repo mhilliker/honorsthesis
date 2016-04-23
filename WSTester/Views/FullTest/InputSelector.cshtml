@@ -1,0 +1,76 @@
+﻿@{
+    ViewBag.Title = "InputSelector";
+}
+
+<h2>InputSelector</h2>
+
+<!--
+<script>
+  $(function() {
+    var availableTags = [
+      "ActionScript",
+      "AppleScript",
+      "Asp",
+      "BASIC",
+      "C",
+      "C++",
+      "Clojure",
+      "COBOL",
+      "ColdFusion",
+      "Erlang",
+      "Fortran",
+      "Groovy",
+      "Haskell",
+      "Java",
+      "JavaScript",
+      "Lisp",
+      "Perl",
+      "PHP",
+      "Python",
+      "Ruby",
+      "Scala",
+      "Scheme"
+    ];
+    $( "#tags" ).autocomplete({
+      source: availableTags
+    });
+  });
+</script>
+
+<p>
+    Sample:
+</p>
+    <div class="ui-widget">
+        <label for="tags">Tags: </label>
+        <input id="tags">
+    </div>
+ -->
+
+<script>
+    window.tags = @ViewBag.tags;
+</script>
+
+@using (Html.BeginForm("RunCase", "FullTest"))
+{
+    if (ViewBag.parameters.Length > 0)
+    {
+        int i = 0;
+        foreach (var p in ViewBag.parameters)
+        {
+            <p>(@p.ParameterType) @p.Name:</p>
+            <div class="ui-widget">
+                <input id="@p.Name" name="@p.Name" type="text" value="@ViewBag.SampleCase[i++]" />
+            </div>
+            <br />
+            <script>
+                $(function() {
+                    var availableTags =  window.tags[@i-1];
+                    $( "#@p.Name" ).autocomplete({
+                        source: availableTags
+                    });
+                });
+            </script>
+        }
+    }
+    <input type="submit" value="Submit" />
+}

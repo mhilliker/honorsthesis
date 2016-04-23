@@ -1,0 +1,32 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+}
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+
+<script>
+    function addOption(s)
+    {
+
+    }
+    function resizeInput() {
+        $(this).attr('size', $(this).val().length);
+    }
+
+    $('input[type="text"]')
+        // event handler
+        .keyup(resizeInput)
+        // resize on page load
+        .each(resizeInput);
+</script>
+
+<h2>Service Reference</h2>
+
+@using (Html.BeginForm("GetServiceRef", "FullTest"))
+{
+    <p>Please input a service reference to test:</p>
+    <input id="sref" name="sref" type="text" value="" style="width:500px;">
+    <br />
+    <input type="submit" value="Submit" />
+}

@@ -1,0 +1,53 @@
+﻿@{
+    ViewBag.Title = "RESTInputSelector";
+}
+
+<script>
+    function addVariable() {
+        console.log("in add");
+        var curArgs = $("#arguments").val();
+        console.log(curArgs);
+        var newName = $("#varName").val();
+        var newVals = $("#varValue").val();
+        var newArgs = curArgs + (curArgs.trim().length == 0 ? "" : "&") + newName + "=" + newVals;
+        $("#arguments").val(newArgs);
+        console.log(newArgs);
+        $("#varValue").val("");
+        $("#varName").val("");
+    }
+
+    function resetVariables() {
+        $("#arguments").val("");
+    }
+</script>
+
+<h2>REST Input Selector</h2>
+
+<p>Add new variable:</p>
+<p>Variable Name:  <input id="varName" />     <br /></p>
+<p>Variable Value: <input id="varValue" />    <br /></p>
+<button onclick="addVariable()">Add</button> <br />
+
+
+<button onclick="resetVariables()">Reset Variables</button>
+
+
+<form action="/FullTest/RunRESTCase" method="post">
+    <p>Method</p>
+
+    <select name="method">
+        <option value="GET">GET</option>
+        <option value="POST">POST</option>
+    </select>
+
+    <br />
+
+    <p>Arguments</p>
+    <input id="arguments" name="arguments" />
+
+    <br />
+
+    <input type="submit" value="submit">
+</form>
+
+

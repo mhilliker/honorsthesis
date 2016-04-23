@@ -1,0 +1,88 @@
+﻿@model WebApplication1.Models.TestSettings
+
+@{
+    ViewBag.Title = "SettingSelector";
+}
+
+<h2>Test Configuration</h2>
+
+
+<ul class="nav nav-pills">
+    <li class="active"><a data-toggle="pill" href="#home">Select Method</a></li>
+    <li><a data-toggle="pill" href="#menu1">Saved Case</a></li>
+</ul>
+
+
+<div class="tab-pane fade in active" id="home">
+    @using (Html.BeginForm("MethodChooser", "FullTest"))
+    {
+        <p>Please select a method to test:</p>
+
+
+        List<SelectListItem> listItems = new List<SelectListItem>();
+        for (var i = 0; i < Model.methods.Length; i++)
+        {
+            listItems.Add(new SelectListItem { Text = Model.methods[i], Value = Model.methods[i] });
+        }
+
+
+        @Html.DropDownList("Method", new SelectList(listItems, "Value", "Text"));
+        <br />
+        <br />
+        <input type="submit" value="Submit" />
+
+    }
+</div>
+
+
+<div class="tab-pane fade" id="menu1">
+@using (Html.BeginForm("Settings", "FullTest"))
+{
+    <p>Please select a method to test:</p>
+
+
+    List<SelectListItem> listItems = new List<SelectListItem>();
+    for (var i = 0; i < Model.methods.Length; i++)
+    {
+        listItems.Add(new SelectListItem { Text = Model.methods[i], Value = Model.methods[i] });
+    }
+
+
+    @Html.DropDownList("Method", new SelectList(listItems, "Value", "Text"));
+    <br />
+    <br />
+    <p>Please select a case to test:</p>
+
+
+    List<SelectListItem> listItems2 = new List<SelectListItem>();
+    for (var i = 0; i < Model.cases.Length; i++)
+    {
+        listItems2.Add(new SelectListItem { Text = Model.cases[i], Value = Model.cases[i] });
+    }
+
+
+    <div>@Html.DropDownList("Case", new SelectList(listItems2, "Value", "Text"))</div>
+
+    <br />
+    
+    <p>Please select a style of test to perform:</p>
+
+    List<SelectListItem> listItems3 = new List<SelectListItem>();
+
+    listItems3.Add(new SelectListItem { Text = "Chi-Squared", Value = "X2" });
+    listItems3.Add(new SelectListItem { Text = "Load", Value = "Load" });
+    listItems3.Add(new SelectListItem { Text = "Performance", Value = "Performance" });
+    listItems3.Add(new SelectListItem { Text = "Logit", Value = "Logit" });
+    listItems3.Add(new SelectListItem { Text = "Probe", Value = "Probe" });
+    
+
+
+    <div>@Html.DropDownList("Test", new SelectList(listItems3, "Value", "Text"))</div>
+
+    <br />
+    <input type="submit" value="Submit" />
+
+}
+
+</div>
+
