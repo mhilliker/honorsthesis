@@ -3,6 +3,11 @@
 }
 
 <script>
+    $(".navbar").hide();
+    $("footer").hide();
+</script>
+
+<script>
     function addVariable() {
         console.log("in add");
         var curArgs = $("#arguments").val();
@@ -43,11 +48,17 @@
     <br />
 
     <p>Arguments</p>
-    <input id="arguments" name="arguments" />
+    @if (ViewBag.RESTArgs != null) {
+        <input id="arguments" name="arguments" value="@ViewBag.RESTArgs" />
+    } else {
+        <input id="arguments" name="arguments" value="" />
+    }
 
     <br />
 
     <input type="submit" value="submit">
 </form>
+
+
 
 

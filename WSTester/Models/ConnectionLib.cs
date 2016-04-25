@@ -9,6 +9,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Net.NetworkInformation;
 using System.Reflection;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Json;
@@ -746,6 +747,28 @@ namespace ConnectionLib
             
             return result;
         }
+
+
+        public static long ping(string sref)
+        {
+            long ping = 0;
+            Uri uri = new Uri(sref);
+            using (Ping pinger = new Ping())
+            {
+                try
+                {
+                    ping = pinger.Send(uri.Host.Contains("www.") ? uri.Host : "www." + uri.Host).RoundtripTime;
+                    if (ping == 0)
+                        ping = pinger.Send("www.asu.edu").RoundtripTime;
+                }
+                catch
+                {
+                    ping = pinger.Send("www.google.com").RoundtripTime;
+                }
+            }
+            return ping;
+        }
+
     }
 
 }

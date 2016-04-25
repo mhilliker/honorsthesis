@@ -61,7 +61,15 @@ namespace WebApplication1.Views
                 if(beenCalled)
                 {
                     // gather inputs and pass them to the viewbag
-
+                    using (DataAccessSQL d = new DataAccessSQL())
+                    {
+                        var list = d.GetCachedInput(sref, "GET"); 
+                        if(list.Count > 0)
+                        {
+                            ViewBag.RESTArgs = list[0].InputString;
+                        }
+                    }
+                    return View("RESTInputSelector");
                 }
                 else
                 {
@@ -242,20 +250,7 @@ namespace WebApplication1.Views
 
             // measure ping for performace scaling
             string sref = Session["service_reference"] as string;
-            Uri uri = new Uri(sref);
-            using (Ping pinger = new Ping())
-            {
-                try
-                {
-                    ping = pinger.Send(uri.Host.Contains("www.") ? uri.Host : "www." + uri.Host).RoundtripTime;
-                    if (ping == 0)
-                        ping = pinger.Send("www.asu.edu").RoundtripTime;
-                }
-                catch
-                {
-                    ping = pinger.Send("www.google.com").RoundtripTime;
-                }
-            }
+            ping = ConnectionLib.RESTProxy.ping(sref);
             string jsonInput  = DynamicJson.Serialize(parameters);
             string jsonTypes = DynamicJson.Serialize(typeNames);
             string jsonOutput = DynamicJson.Serialize(ViewBag.resultJson);
@@ -276,12 +271,18 @@ namespace WebApplication1.Views
             string meth = fc["method"] as string;
             string args = fc["arguments"] as string;
             string res = "";
-            if(args.Length == 0)
+            long ping = ConnectionLib.RESTProxy.ping(sref);
+            long time_elapsed = 0;
+            if (args.Length == 0)
             {
                 // invoke service as is
                 using (ConnectionLib.RESTProxy proxy = new ConnectionLib.RESTProxy(sref, new string[0], new string[0], meth.Equals("GET")))
                 {
-                     res = proxy.invoke();
+                    Stopwatch sw = Stopwatch.StartNew();
+                    res = proxy.invoke();
+                    time_elapsed = sw.ElapsedMilliseconds;
+                    sw.Stop();
+
                 }
             }
             else
@@ -289,8 +290,17 @@ namespace WebApplication1.Views
                 // TODO: add validation for proper encoding
                 using (ConnectionLib.RESTProxy proxy = new ConnectionLib.RESTProxy(sref, args, meth.Equals("GET")))
                 {
+                    Stopwatch sw = Stopwatch.StartNew();
                     res = proxy.invoke();
+                    time_elapsed = sw.ElapsedMilliseconds;
+                    sw.Stop();
                 }
+            }
+
+            using (DataAccessSQL db = new DataAccessSQL())
+            {
+                int in_id = db.InsertCachedInput(Session["service_reference"] as string, meth, "", args);
+                db.InsertCachedOutput(in_id, time_elapsed, ping, res);
             }
 
             ViewBag.resultJson = res;
